@@ -5,7 +5,7 @@ module Spree
     has_many :orders
 
     validates_presence_of :name, :code, :domains
-    attr_accessible :name, :code, :default, :email, :domains
+    attr_accessible :name, :code, :default, :email, :domains, :meta_keywords, :meta_description
 
     scope :default, where(:default => true)
     scope :by_domain, lambda { |domain| where("domains like ?", "%#{domain}%") }

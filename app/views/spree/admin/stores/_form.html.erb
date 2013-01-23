@@ -41,4 +41,20 @@
       <%= error_message_on :store, :domains %>
     <% end %>
   </div>
+
+  <div class="omega six columns">
+    <%= f.field_container :meta_keywords do %>
+      <%= f.label :meta_keywords, t(:meta_keywords) %><br />
+      <%= f.text_area :meta_keywords, :cols => 60, :rows => 4, :class => 'fullwidth' %>
+      <%= error_message_on :store, :meta_keywords %>
+    <% end %>
+  </div>
+
+  <div class="omega six columns">
+    <%= f.field_container :meta_description do %>
+      <%= f.label :meta_description, t(:meta_description) %><br />
+      <%= f.text_area :meta_description, :cols => 60, :rows => 4, :class => 'fullwidth' %>
+      <%= error_message_on :store, :meta_description %>
+    <% end %>
+  </div>
 </div>
