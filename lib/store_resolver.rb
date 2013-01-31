@@ -5,6 +5,6 @@ class StoreResolver < ::ActionView::FileSystemResolver
   end
 
   def find_templates(name, prefix, partial, details)
-    super(name, prefix.gsub('spree/', 'wavves/'), partial, details)
+    super(name, prefix.gsub('spree/', "#{@store.code}/"), partial, details)
   end
 end
