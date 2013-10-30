@@ -3,7 +3,10 @@ Spree::Admin::ProductsController.class_eval do
 
   private
   def set_stores
-    @product.store_ids = nil unless params[:product].key? :store_ids
+    unless ((params[:product].key? :store_ids) || 
+            (params[:product].key? :product_properties_attributes))
+      @product.store_ids = nil
+    end
   end
 
 end
