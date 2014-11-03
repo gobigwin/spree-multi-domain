@@ -34,7 +34,14 @@
     <% end %>
   </div>
 
-  <div class="omega six columns">
+  <div class="four columns">
+    <%= f.field_container :default_currency do %>
+      <%= f.label :default_currency, t(:default_currency) %>
+      <%= f.text_field :default_currency %>
+    <% end %>
+  </div>
+
+  <div class="six columns">
     <%= f.field_container :domains do %>
       <%= f.label :domains, t(:domains) %><br />
       <%= f.text_area :domains, :cols => 60, :rows => 4, :class => 'fullwidth' %>
@@ -56,5 +63,44 @@
       <%= f.text_area :meta_description, :cols => 60, :rows => 4, :class => 'fullwidth' %>
       <%= error_message_on :store, :meta_description %>
     <% end %>
+  </div>
+
+  <div class="eight columns">
+    <%= image_tag @store.logo %>
+    <%= f.field_container :logo do %>
+      <%= f.label :logo, t(:logo) %><br />
+      <%= f.file_field :logo %>
+      <%= error_message_on :store, :logo %>
+    <% end %>
+  </div>
+
+  <div class='row'>
+    <div class="alpha six columns">
+      <%= f.field_container :payment_methods do %>
+        <%= f.label :payment_methods, t(:payment_methods) %><br />
+        <% @payment_methods.each do |payment_method| %>
+          <label class="sub">
+            <%= check_box_tag 'store[payment_method_ids][]', payment_method.id, @store.payment_methods.include?(payment_method) %>
+          </label> &nbsp;
+          <%= "#{payment_method.name} (#{payment_method.environment})" %>
+          <br>
+        <% end %>
+        <%= hidden_field_tag 'store[payment_method_ids][]', '' %>
+      <% end %>
+    </div>
+
+    <div class="omega six columns">
+      <%= f.field_container :shipping_methods do %>
+        <%= f.label :shipping_methods, t(:shipping_methods) %><br />
+        <% @shipping_methods.each do |shipping_method| %>
+          <label class="sub">
+            <%= check_box_tag 'store[shipping_method_ids][]', shipping_method.id, @store.shipping_methods.include?(shipping_method) %>
+          </label> &nbsp;
+          <%= shipping_method.name %>
+          <br>
+        <% end %>
+        <%= hidden_field_tag 'store[shipping_method_ids][]', '' %>
+      <% end %>
+    </div>
   </div>
 </div>
