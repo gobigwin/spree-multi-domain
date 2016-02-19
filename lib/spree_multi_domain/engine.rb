@@ -23,7 +23,7 @@ module SpreeMultiDomain
           store_layout = layout.is_a?(String) ? layout : layout.call
 
           if @view.respond_to?(:current_store) && @view.current_store && !@view.controller.is_a?(Spree::Admin::BaseController)
-            store_layout = store_layout.gsub("layouts/", "layouts/#{@view.current_store.code}/")
+            store_layout = store_layout.gsub("spree/layouts/", "#{@view.current_store.code}/layouts/")
           end
 
           begin
@@ -51,6 +51,21 @@ module SpreeMultiDomain
           @current_order
         end
         alias_method_chain :current_order, :multi_domain
+      end
+    end
+
+    initializer "override partial rendering" do |app|
+      ActionView::PartialRenderer.class_eval do
+        def find_template(path=@path, locals=@locals.keys)
+          prefixes = path.include?(?/) ? [] : @lookup_context.prefixes
+          begin
+            # This is a bit hacky to catch this much. Some @views will not have a @current_store. Kind of a catch all.
+            # TODO: Clean up
+            @lookup_context.find_template(path.gsub('spree/', "#{@view.current_store.code}/"), prefixes, true, locals, @details)
+          rescue
+            @lookup_context.find_template(path, prefixes, true, locals, @details)
+          end
+        end
       end
     end
 
