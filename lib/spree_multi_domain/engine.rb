@@ -54,6 +54,21 @@ module SpreeMultiDomain
       end
     end
 
+    initializer "override partial rendering" do |app|
+      ActionView::PartialRenderer.class_eval do
+        def find_template(path=@path, locals=@locals.keys)
+          prefixes = path.include?(?/) ? [] : @lookup_context.prefixes
+          begin
+            # This is a bit hacky to catch this much. Some @views will not have a @current_store. Kind of a catch all.
+            # TODO: Clean up
+            @lookup_context.find_template(path.gsub('spree/', "#{@view.current_store.code}/"), prefixes, true, locals, @details)
+          rescue
+            @lookup_context.find_template(path, prefixes, true, locals, @details)
+          end
+        end
+      end
+    end
+
     initializer 'spree.promo.register.promotions.rules' do |app|
       app.config.spree.promotions.rules << Spree::Promotion::Rules::Store
     end
